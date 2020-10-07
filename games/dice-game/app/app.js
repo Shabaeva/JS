@@ -1,15 +1,3 @@
-/*
-GAME RULES:
-
-- The game has 2 players, playing in rounds
-- In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
-- BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
-- The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
-- The first player to reach 100 points on GLOBAL score wins the game
-
-*/
-
-
     let scores, roundScore, activePlayer, gamePlaying;
 
     //global score 0 player
@@ -41,6 +29,8 @@ GAME RULES:
 
     init();
 
+    let previousDiceRoll;
+
     function nextPlayer() {
         activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
         roundScore = 0;
@@ -67,12 +57,18 @@ GAME RULES:
             diceDom.src = '../img/dice-' + dice + '.png';
 
             //3. update the round score if the rolled number was not a 1
-            if( dice !== 1) {
+            if (dice === 6 && previousDiceRoll === 6) {
+                scores[activePlayer] = 0;
+                document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+                nextPlayer();
+            } else if( dice !== 1) {
                 roundScore += dice;
                 document.querySelector('#current-' + activePlayer).textContent = roundScore;
             } else {
                 nextPlayer();
             }
+            previousDiceRoll = dice;
+
         }
     });
 
